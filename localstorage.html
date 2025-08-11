@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function savobj(){
+            var a={
+                name: "kunj",
+                age: 19,
+                city: "New York",
+                mobile:1234567891
+
+            }
+            // Convert DATA TO STRING
+            var mydata = JSON.stringify(a)
+            //document.write(mydata);
+            localStorage.setItem("user a", mydata)        
+         }
+         function savdata()
+         {
+            localStorage.setItem("name", "kunj")
+            localStorage.setItem("age", "19")
+            localStorage.setItem("city", "New York")
+            document.getElementById("ans").innerHTML = "Data saved successfully!"
+         }
+         function getdata()
+         {
+            var a =localStorage.getItem("name")
+            console.log("Name: " + a)
+            document.getElementById("ans").innerHTML = "Name: " + a
+         }
+         function getobjdata()
+         {
+            var a = localStorage.getItem("user a")
+            // Convert STRING TO OBJECT
+            var mydata = JSON.parse(a)
+            document.getElementById("ans").innerHTML = "Name: " + mydata.name + ", Age: " + mydata.age + ", City: " + mydata.city + ", Mobile: " + mydata.mobile
+         }
+         function removedata()
+         {
+            localStorage.removeItem("name")
+            document.getElementById("ans").innerHTML = "Data removed successfully!"
+         }
+         function clearall()
+         {
+            localStorage.clear()
+            document.getElementById("ans").innerHTML = "All data cleared successfully!"
+         }
+
+
+
+    </script>
+</head>
+<body>
+
+    <p id="ans"></p>`
+    <input type="button" value="Save" onclick="savdata()">
+    <input type="button" value="Save Object" onclick="savobj()">
+    <input type="button" value="Get Data" onclick="getdata()">
+    <input type="button" value="Get Object Data" onclick="getobjdata()">
+    <input type="button" value="Remove Data" onclick="removedata()">
+    <input type="button" value="Clear All Data" onclick="clearall()">
+    
+</body>
+</html>
