@@ -29,20 +29,24 @@ body {
   background-color: var(--color-bg-light);
   color: var(--color-text);
   margin: 0;
-  padding: var(--spacing-md);
-  line-height: 1.5;
+  padding: var(--spacing-sm);
+  line-height: 1.4;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .container {
   max-width: 600px;
-  margin: 0 auto;
-  padding: var(--spacing-lg);
+  width: 100%;
+  padding: var(--spacing-md);
 }
 
 h1 {
   text-align: center;
   color: var(--color-primary);
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 600;
   margin: 0 0 var(--spacing-xs) 0;
 }
@@ -50,19 +54,19 @@ h1 {
 .subtitle {
   text-align: center;
   color: var(--color-text-muted);
-  font-size: 16px;
-  margin: 0 0 var(--spacing-xl) 0;
+  font-size: 14px;
+  margin: 0 0 var(--spacing-md) 0;
 }
 
 .calculator {
   background: var(--color-bg);
   border-radius: var(--border-radius);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
 }
 
 .form-group {
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
 }
 
 label {
@@ -75,7 +79,7 @@ label {
 
 input[type="text"] {
   width: 100%;
-  padding: 12px var(--spacing-sm);
+  padding: 10px var(--spacing-sm);
   border: 2px solid var(--color-border);
   border-radius: 6px;
   font-size: 16px;
@@ -93,7 +97,7 @@ input[type="text"]::placeholder {
 
 .operation-buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: var(--spacing-sm);
   margin-top: var(--spacing-sm);
 }
@@ -108,12 +112,12 @@ input[type="text"]::placeholder {
 
 .operation-btn {
   display: block;
-  padding: 12px var(--spacing-sm);
+  padding: 10px var(--spacing-xs);
   background: var(--color-bg-light);
   border: 2px solid var(--color-border);
   border-radius: 6px;
   text-align: center;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   transition: all 0.2s ease;
   user-select: none;
@@ -132,15 +136,15 @@ input[type="text"]::placeholder {
 
 .calculate-btn {
   width: 100%;
-  padding: 16px;
+  padding: 12px;
   background: var(--color-primary);
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: var(--spacing-md);
+  margin-top: var(--spacing-sm);
   transition: all 0.2s ease;
 }
 
@@ -154,8 +158,8 @@ input[type="text"]::placeholder {
 }
 
 .result-section {
-  margin-top: var(--spacing-lg);
-  padding-top: var(--spacing-lg);
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
   border-top: 1px solid var(--color-border);
 }
 
@@ -178,9 +182,9 @@ input[type="text"]::placeholder {
   color: #155724;
   border: 1px solid #c3e6cb;
   border-radius: 6px;
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   text-align: center;
-  font-size: 18px;
+  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
