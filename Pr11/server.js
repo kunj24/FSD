@@ -20,15 +20,27 @@ app.use((req, res, next) => {
   next();
 });
 
-// Home route - Dashboard page
+// Home route - Dashboard page for team onboarding
 app.get('/home', (req, res) => {
   const greeting = {
-    message: 'Welcome to the Dashboard!',
-    description: 'This is your team\'s Express.js project template',
+    message: '🚀 Welcome to Your Team Dashboard!',
+    description: 'This is your Express.js project template for team onboarding',
+    teamInfo: {
+      purpose: 'Base template for future web applications',
+      features: ['Express.js server', 'Dashboard route', 'Health monitoring', 'Error handling'],
+      nextSteps: 'Customize this template for your specific needs'
+    },
     timestamp: new Date().toISOString(),
-    routes: {
-      home: '/home - Dashboard page (current)',
-      health: '/health - Health check endpoint'
+    availableRoutes: {
+      home: '/home - Team dashboard (current page)',
+      health: '/health - Server health check',
+      api: '/api/* - Future API endpoints',
+      root: '/ - Redirects to dashboard'
+    },
+    developmentTips: {
+      dev: 'Use npm run dev for development with auto-restart',
+      production: 'Use npm start for production',
+      customization: 'Add new routes, middleware, and features as needed'
     }
   };
   
@@ -50,12 +62,36 @@ app.get('/', (req, res) => {
   res.redirect('/home');
 });
 
+// Sample API routes for team to extend
+app.get('/api/status', (req, res) => {
+  res.json({
+    api: 'Team Template API',
+    version: '1.0.0',
+    status: 'active',
+    endpoints: ['/api/status', '/api/team'],
+    message: 'Add your custom API endpoints here'
+  });
+});
+
+app.get('/api/team', (req, res) => {
+  res.json({
+    message: 'Team information endpoint',
+    template: 'This is where you can add team-specific data',
+    example: {
+      teamName: 'Development Team',
+      members: ['Add', 'team', 'members', 'here'],
+      projects: ['Express Template', 'Future Projects']
+    }
+  });
+});
+
 // 404 handler for undefined routes
 app.use('*', (req, res) => {
   res.status(404).json({
     error: 'Route not found',
     message: `The route ${req.originalUrl} does not exist`,
-    availableRoutes: ['/home', '/health']
+    availableRoutes: ['/home', '/health', '/api/status', '/api/team'],
+    tip: 'Visit /home for the main dashboard'
   });
 });
 
