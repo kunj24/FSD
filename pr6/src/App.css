@@ -1,3 +1,39 @@
+.todo-list-section {
+  width: 100%;
+  margin-bottom: 18px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 18px 16px 10px 16px;
+  box-shadow: 0 1px 4px rgba(111,66,193,0.08);
+}
+.todo-list-heading {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #b39ddb;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+.todo-list-ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.todo-list-li {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(179,157,219,0.12);
+  color: #fff;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+.todo-list-li:last-child {
+  border-bottom: none;
+}
+.todo-list-empty {
+  color: #b39ddb;
+  font-style: italic;
+  padding: 8px 0;
+}
 /* Minimal, professional To-Do List styles */
 :root {
   --color-primary: #6f42c1;
