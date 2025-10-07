@@ -23,7 +23,7 @@ function App() {
 
   return (
     <div className="todo-app">
-      <h1 className="todo-title">Get Things Done !</h1>
+  <h1 className="todo-title">Get Things Done (Todo List)</h1>
       <div className="todo-input-row">
         <input
           className="todo-input"
