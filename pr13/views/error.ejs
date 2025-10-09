@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Error - <%= message %></title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Oops! Something went wrong</h1>
+    </header>
+
+    <main>
+      <div class="error-card">
+        <h2><%= message %></h2>
+        <% if (error && error.status) { %>
+          <p class="error-code">Error Code: <%= error.status %></p>
+        <% } %>
+        
+        <% if (error && error.stack && process.env.NODE_ENV === 'development') { %>
+          <details class="error-details">
+            <summary>Technical Details (Development Mode)</summary>
+            <pre><%= error.stack %></pre>
+          </details>
+        <% } %>
+      </div>
+
+      <div class="action-buttons">
+        <a href="/" class="btn btn-primary">Return to Tax Calculator</a>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Tax Income Calculator - For Educational Purposes</p>
+    </footer>
+  </div>
+</body>
+</html>

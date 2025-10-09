@@ -1,0 +1,395 @@
+/* Tax Income Calculator Styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-text: #333;
+  --color-bg-start: #1fa67a; /* green gradient start */
+  --color-bg-end: #0b8f66;   /* green gradient end */
+  --color-primary-start: #2ecc71; /* buttons/accents */
+  --color-primary-end: #16a085;
+  --color-accent: #27ae60; /* amounts */
+  --color-muted: #7f8c8d;
+  --color-border: #e0e0e0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: linear-gradient(135deg, var(--color-bg-start) 0%, var(--color-bg-end) 100%);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+  color: white;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+main {
+  flex: 1;
+  background: white;
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* Form Styles */
+.tax-form {
+  margin-bottom: 40px;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 15px;
+  color: #7f8c8d;
+  font-weight: bold;
+  font-size: 1.1rem;
+  z-index: 1;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 15px 15px 15px 35px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--color-primary-start);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.08);
+}
+
+input[type="text"].error {
+  border-color: #e74c3c;
+  background: #fdf2f2;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.calculate-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--color-primary-start) 0%, var(--color-primary-end) 100%);
+  color: white;
+  border: none;
+  padding: 18px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.calculate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(22, 160, 133, 0.25);
+}
+
+.calculate-btn:active {
+  transform: translateY(0);
+}
+
+/* Results Styles */
+.results-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 30px;
+  border: 1px solid #dee2e6;
+}
+
+.results-card h2 {
+  color: #2c3e50;
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+.income-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.income-item:last-child {
+  border-bottom: none;
+}
+
+.total-income {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-top: 2px solid var(--color-primary-start);
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.label {
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.amount {
+  font-size: 1.2rem;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.amount.total {
+  font-size: 1.5rem;
+  color: var(--color-primary-start);
+}
+
+/* Info Section */
+.info-section, .tax-info {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 30px;
+}
+
+.info-section h3, .tax-info h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.info-section ul, .tax-info ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.info-section li, .tax-info li {
+  padding: 8px 0;
+  position: relative;
+  padding-left: 25px;
+}
+
+.info-section li:before, .tax-info li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #27ae60;
+  font-weight: bold;
+}
+
+/* Button Styles */
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary-start) 0%, var(--color-primary-end) 100%);
+  color: white;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Error Styles */
+.error-card {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.error-code {
+  color: #721c24;
+  font-weight: 600;
+  margin: 15px 0;
+}
+
+.error-details {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.error-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.error-details pre {
+  background: #f1f3f4;
+  padding: 15px;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 40px;
+  color: white;
+  opacity: 0.8;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .container {
+    max-width: none;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  header {
+    color: black;
+  }
+  
+  main {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .action-buttons {
+    display: none;
+  }
+  
+  footer {
+    color: black;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  
+  header h1 {
+    font-size: 2rem;
+  }
+  
+  main {
+    padding: 25px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  main {
+    padding: 20px;
+  }
+  
+  .results-card {
+    padding: 20px;
+  }
+  
+  .income-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  .total-income {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+}

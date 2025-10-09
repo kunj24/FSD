@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><%= title %></h1>
+      <p class="subtitle">Your income calculation has been completed</p>
+    </header>
+
+    <main>
+      <div class="results-card">
+        <h2>Income Breakdown</h2>
+        
+        <div class="income-item">
+          <span class="label">Income Source 1:</span>
+          <span class="amount"><%= formatCurrency(income1) %></span>
+        </div>
+        
+        <div class="income-item">
+          <span class="label">Income Source 2:</span>
+          <span class="amount"><%= formatCurrency(income2) %></span>
+        </div>
+        
+        <div class="total-income">
+          <span class="label">Total Income:</span>
+          <span class="amount total"><%= formatCurrency(totalIncome) %></span>
+        </div>
+      </div>
+
+      <div class="tax-info">
+        <h3>Next Steps for Tax Filing:</h3>
+        <ul>
+          <li>Report this total income on your tax return</li>
+          <li>Keep records of both income sources for documentation</li>
+          <li>Consider consulting a tax professional for complex situations</li>
+          <li>Remember to account for any deductions you may be eligible for</li>
+        </ul>
+      </div>
+
+      <div class="action-buttons">
+        <a href="/" class="btn btn-primary">Calculate New Income</a>
+        <button onclick="window.print()" class="btn btn-secondary">Print Results</button>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Tax Income Calculator - For Educational Purposes</p>
+    </footer>
+  </div>
+
+  <script>
+    // Only client-side script is for print functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add print-specific styling when printing
+      window.addEventListener('beforeprint', function() {
+        document.body.classList.add('printing');
+      });
+      
+      window.addEventListener('afterprint', function() {
+        document.body.classList.remove('printing');
+      });
+    });
+  </script>
+</body>
+</html>
