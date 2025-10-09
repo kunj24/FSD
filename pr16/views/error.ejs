@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Error</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+  </head>
+  <body>
+    <div class="container">
+      <main>
+        <div class="error-card">
+          <h2>Error</h2>
+          <p><%= message %></p>
+          <% if (error && error.stack) { %>
+            <details class="error-details">
+              <summary>Stack</summary>
+              <pre><%= error.stack %></pre>
+            </details>
+          <% } %>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
