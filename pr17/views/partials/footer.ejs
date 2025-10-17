@@ -1,27 +1,30 @@
     <script>
         // Global utility functions
         function showMessage(message, type = 'success') {
-            // Remove existing messages
-            const existingMessages = document.querySelectorAll('.alert');
-            existingMessages.forEach(msg => msg.remove());
+            // Ensure toast container exists
+            let toast = document.querySelector('.toast-container');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.className = 'toast-container';
+                document.body.appendChild(toast);
+            }
 
             const alertDiv = document.createElement('div');
             alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.animation = 'fadeDown 250ms ease-out, fadeIn 250ms ease-out';
             alertDiv.innerHTML = `
                 <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
                 <span>${message}</span>
             `;
 
-            // Insert at the top of the form container or page
-            const container = document.querySelector('.form-container') || document.querySelector('.page-container') || document.body;
-            container.insertBefore(alertDiv, container.firstChild);
+            toast.appendChild(alertDiv);
 
-            // Auto-remove after 5 seconds
+            // Auto-remove after 4 seconds
             setTimeout(() => {
                 alertDiv.style.opacity = '0';
-                alertDiv.style.transform = 'translateY(-20px)';
-                setTimeout(() => alertDiv.remove(), 300);
-            }, 5000);
+                alertDiv.style.transform = 'translateY(-10px)';
+                setTimeout(() => alertDiv.remove(), 250);
+            }, 4000);
 
             return alertDiv;
         }
@@ -102,6 +105,70 @@
                 resultsDiv.style.display = 'block';
             } else {
                 resultsDiv.style.display = 'none';
+            }
+        }
+
+        // Export table data to CSV
+        async function exportData() {
+            try {
+                // Prefer current table view (respects filters), fallback to API
+                const rows = Array.from(document.querySelectorAll('.student-row'));
+                let data = [];
+                if (rows.length) {
+                    data = rows
+                        .filter(r => r.style.display !== 'none')
+                        .map(r => {
+                            const name = r.querySelector('.student-name')?.textContent?.trim() || r.querySelector('.col-name')?.textContent?.trim() || '';
+                            const email = r.querySelector('.col-email')?.textContent?.trim() || '';
+                            const phone = r.querySelector('.col-phone')?.textContent?.trim() || '';
+                            const grade = r.querySelector('.grade-badge')?.textContent?.trim() || r.querySelector('.col-grade')?.textContent?.trim() || '';
+                            const subject = r.querySelector('.subject-tag')?.textContent?.trim() || r.querySelector('.col-subject')?.textContent?.trim() || '';
+                            const status = r.querySelector('.status-badge')?.textContent?.trim() || '';
+                            return { name, email, phone, grade, subject, status };
+                        });
+                }
+
+                if (!data.length) {
+                    const res = await fetch('/api/students');
+                    if (!res.ok) throw new Error('Failed to fetch students');
+                    const apiData = await res.json();
+                    data = apiData.map(s => ({
+                        name: s.name,
+                        email: s.email,
+                        phone: s.phone,
+                        grade: s.grade,
+                        subject: s.subject,
+                        status: s.feesPaid ? 'Paid' : 'Pending'
+                    }));
+                }
+
+                if (!data.length) {
+                    showMessage('No data available to export', 'error');
+                    return;
+                }
+
+                const headers = ['Name','Email','Phone','Grade','Subject','Status'];
+                const escapeCSV = (val) => {
+                    const v = (val ?? '').toString();
+                    return /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
+                };
+                const csv = [headers.join(',')]
+                    .concat(data.map(row => headers.map(h => escapeCSV(row[h.toLowerCase()])).join(',')))
+                    .join('\n');
+
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `students_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+                showMessage('Exported students to CSV successfully.', 'success');
+            } catch (err) {
+                console.error(err);
+                showMessage('Failed to export data. Please try again.', 'error');
             }
         }
 
@@ -312,6 +379,22 @@
                 }
             `;
             document.head.appendChild(style);
+
+            // IntersectionObserver to trigger reveal/stagger animations
+            if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+                const revealElements = document.querySelectorAll('.reveal, .stagger');
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('show');
+                            // One-shot
+                            io.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                revealElements.forEach(el => io.observe(el));
+            }
         });
 
         // Utility function for animations
