@@ -105,6 +105,70 @@
             }
         }
 
+        // Export table data to CSV
+        async function exportData() {
+            try {
+                // Prefer current table view (respects filters), fallback to API
+                const rows = Array.from(document.querySelectorAll('.student-row'));
+                let data = [];
+                if (rows.length) {
+                    data = rows
+                        .filter(r => r.style.display !== 'none')
+                        .map(r => {
+                            const name = r.querySelector('.student-name')?.textContent?.trim() || r.querySelector('.col-name')?.textContent?.trim() || '';
+                            const email = r.querySelector('.col-email')?.textContent?.trim() || '';
+                            const phone = r.querySelector('.col-phone')?.textContent?.trim() || '';
+                            const grade = r.querySelector('.grade-badge')?.textContent?.trim() || r.querySelector('.col-grade')?.textContent?.trim() || '';
+                            const subject = r.querySelector('.subject-tag')?.textContent?.trim() || r.querySelector('.col-subject')?.textContent?.trim() || '';
+                            const status = r.querySelector('.status-badge')?.textContent?.trim() || '';
+                            return { name, email, phone, grade, subject, status };
+                        });
+                }
+
+                if (!data.length) {
+                    const res = await fetch('/api/students');
+                    if (!res.ok) throw new Error('Failed to fetch students');
+                    const apiData = await res.json();
+                    data = apiData.map(s => ({
+                        name: s.name,
+                        email: s.email,
+                        phone: s.phone,
+                        grade: s.grade,
+                        subject: s.subject,
+                        status: s.feesPaid ? 'Paid' : 'Pending'
+                    }));
+                }
+
+                if (!data.length) {
+                    showMessage('No data available to export', 'error');
+                    return;
+                }
+
+                const headers = ['Name','Email','Phone','Grade','Subject','Status'];
+                const escapeCSV = (val) => {
+                    const v = (val ?? '').toString();
+                    return /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
+                };
+                const csv = [headers.join(',')]
+                    .concat(data.map(row => headers.map(h => escapeCSV(row[h.toLowerCase()])).join(',')))
+                    .join('\n');
+
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `students_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+                showMessage('Exported students to CSV successfully.', 'success');
+            } catch (err) {
+                console.error(err);
+                showMessage('Failed to export data. Please try again.', 'error');
+            }
+        }
+
         // Enhanced form validation
         function validateForm(form) {
             const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');

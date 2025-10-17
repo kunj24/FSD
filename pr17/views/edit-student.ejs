@@ -1,89 +1,171 @@
 <%- include('partials/head', { title: 'Edit Student - EduManager' }) %>
 <body>
-    <div class="form-container">
-        <div class="form-header">
-            <h1><i class="fas fa-user-edit"></i> Edit Student</h1>
-            <p>Update student information</p>
-        </div>
-
-        <% if (error) { %>
-            <div class="error-message">
-                <i class="fas fa-exclamation-triangle"></i>
-                <%= error %>
-            </div>
-        <% } %>
-
-        <form method="POST" action="/students/<%= student._id %>?_method=PUT">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="name"><i class="fas fa-user"></i> Full Name</label>
-                    <input type="text" id="name" name="name" value="<%= student.name %>"
-                           placeholder="Enter student's full name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
-                    <input type="email" id="email" name="email" value="<%= student.email %>"
-                           placeholder="student@example.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="phone"><i class="fas fa-phone"></i> Phone Number</label>
-                    <input type="tel" id="phone" name="phone" value="<%= student.phone %>"
-                           placeholder="1234567890" pattern="[0-9]{10}" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="grade"><i class="fas fa-layer-group"></i> Grade/Class</label>
-                    <select id="grade" name="grade" required>
-                        <option value="">Select Grade</option>
-                        <option value="1st" <%= student.grade === '1st' ? 'selected' : '' %>>1st Grade</option>
-                        <option value="2nd" <%= student.grade === '2nd' ? 'selected' : '' %>>2nd Grade</option>
-                        <option value="3rd" <%= student.grade === '3rd' ? 'selected' : '' %>>3rd Grade</option>
-                        <option value="4th" <%= student.grade === '4th' ? 'selected' : '' %>>4th Grade</option>
-                        <option value="5th" <%= student.grade === '5th' ? 'selected' : '' %>>5th Grade</option>
-                        <option value="6th" <%= student.grade === '6th' ? 'selected' : '' %>>6th Grade</option>
-                        <option value="7th" <%= student.grade === '7th' ? 'selected' : '' %>>7th Grade</option>
-                        <option value="8th" <%= student.grade === '8th' ? 'selected' : '' %>>8th Grade</option>
-                        <option value="9th" <%= student.grade === '9th' ? 'selected' : '' %>>9th Grade</option>
-                        <option value="10th" <%= student.grade === '10th' ? 'selected' : '' %>>10th Grade</option>
-                        <option value="11th" <%= student.grade === '11th' ? 'selected' : '' %>>11th Grade</option>
-                        <option value="12th" <%= student.grade === '12th' ? 'selected' : '' %>>12th Grade</option>
-                    </select>
-                </div>
-
-                <div class="form-group full-width">
-                    <label for="subject"><i class="fas fa-book"></i> Subject</label>
-                    <select id="subject" name="subject" required>
-                        <option value="">Select Subject</option>
-                        <option value="Mathematics" <%= student.subject === 'Mathematics' ? 'selected' : '' %>>Mathematics</option>
-                        <option value="Physics" <%= student.subject === 'Physics' ? 'selected' : '' %>>Physics</option>
-                        <option value="Chemistry" <%= student.subject === 'Chemistry' ? 'selected' : '' %>>Chemistry</option>
-                        <option value="Biology" <%= student.subject === 'Biology' ? 'selected' : '' %>>Biology</option>
-                        <option value="English" <%= student.subject === 'English' ? 'selected' : '' %>>English</option>
-                        <option value="Science" <%= student.subject === 'Science' ? 'selected' : '' %>>Science</option>
-                        <option value="Social Studies" <%= student.subject === 'Social Studies' ? 'selected' : '' %>>Social Studies</option>
-                        <option value="Computer Science" <%= student.subject === 'Computer Science' ? 'selected' : '' %>>Computer Science</option>
-                    </select>
-                </div>
-
-                <div class="form-group full-width">
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="feesPaid" name="feesPaid"
-                               <%= student.feesPaid ? 'checked' : '' %>>
-                        <label for="feesPaid"><i class="fas fa-credit-card"></i> Fees Paid</label>
+    <div class="page-container">
+        <div class="form-page">
+            <div class="form-container">
+                <div class="form-header">
+                    <div class="header-icon">
+                        <i class="fas fa-user-edit"></i>
                     </div>
+                    <h1>Edit Student</h1>
+                    <p>Update the student's information below and save your changes</p>
                 </div>
-            </div>
 
-            <div class="button-group">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Update Student
-                </button>
-                <a href="/" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Cancel
-                </a>
+                <% if (error) { %>
+                    <div class="alert alert-error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span><%= error %></span>
+                    </div>
+                <% } %>
+
+                <form method="POST" action="/students/<%= student._id %>?_method=PUT" id="editStudentForm" novalidate>
+                    <div class="form-sections">
+                        <!-- Personal Information Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <i class="fas fa-user"></i>
+                                <h3>Personal Information</h3>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <i class="fas fa-user"></i>
+                                        Full Name <span class="required">*</span>
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="text" id="name" name="name" value="<%= student.name %>"
+                                               placeholder="Enter student's full name" required>
+                                        <div class="input-icon">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                    </div>
+                                    <div class="field-hint">Enter the complete name as it appears on official documents</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">
+                                        <i class="fas fa-envelope"></i>
+                                        Email Address <span class="required">*</span>
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="email" id="email" name="email" value="<%= student.email %>"
+                                               placeholder="student@example.com" required>
+                                        <div class="input-icon">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                    </div>
+                                    <div class="field-hint">We'll use this for important notifications and communications</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">
+                                        <i class="fas fa-phone"></i>
+                                        Phone Number <span class="required">*</span>
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="tel" id="phone" name="phone" value="<%= student.phone %>"
+                                               placeholder="1234567890" pattern="[0-9]{10}" required>
+                                        <div class="input-icon">
+                                            <i class="fas fa-phone"></i>
+                                        </div>
+                                    </div>
+                                    <div class="field-hint">10-digit mobile number without spaces or special characters</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Academic Information Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <i class="fas fa-graduation-cap"></i>
+                                <h3>Academic Information</h3>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="grade">
+                                        <i class="fas fa-layer-group"></i>
+                                        Grade/Class <span class="required">*</span>
+                                    </label>
+                                    <div class="select-wrapper">
+                                        <select id="grade" name="grade" required>
+                                            <option value="">Select Grade</option>
+                                            <option value="1st" <%= student.grade === '1st' ? 'selected' : '' %>>1st Grade</option>
+                                            <option value="2nd" <%= student.grade === '2nd' ? 'selected' : '' %>>2nd Grade</option>
+                                            <option value="3rd" <%= student.grade === '3rd' ? 'selected' : '' %>>3rd Grade</option>
+                                            <option value="4th" <%= student.grade === '4th' ? 'selected' : '' %>>4th Grade</option>
+                                            <option value="5th" <%= student.grade === '5th' ? 'selected' : '' %>>5th Grade</option>
+                                            <option value="6th" <%= student.grade === '6th' ? 'selected' : '' %>>6th Grade</option>
+                                            <option value="7th" <%= student.grade === '7th' ? 'selected' : '' %>>7th Grade</option>
+                                            <option value="8th" <%= student.grade === '8th' ? 'selected' : '' %>>8th Grade</option>
+                                            <option value="9th" <%= student.grade === '9th' ? 'selected' : '' %>>9th Grade</option>
+                                            <option value="10th" <%= student.grade === '10th' ? 'selected' : '' %>>10th Grade</option>
+                                            <option value="11th" <%= student.grade === '11th' ? 'selected' : '' %>>11th Grade</option>
+                                            <option value="12th" <%= student.grade === '12th' ? 'selected' : '' %>>12th Grade</option>
+                                        </select>
+                                        <div class="select-icon">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="subject">
+                                        <i class="fas fa-book"></i>
+                                        Subject <span class="required">*</span>
+                                    </label>
+                                    <div class="select-wrapper">
+                                        <select id="subject" name="subject" required>
+                                            <option value="">Select Subject</option>
+                                            <option value="Mathematics" <%= student.subject === 'Mathematics' ? 'selected' : '' %>>Mathematics</option>
+                                            <option value="Physics" <%= student.subject === 'Physics' ? 'selected' : '' %>>Physics</option>
+                                            <option value="Chemistry" <%= student.subject === 'Chemistry' ? 'selected' : '' %>>Chemistry</option>
+                                            <option value="Biology" <%= student.subject === 'Biology' ? 'selected' : '' %>>Biology</option>
+                                            <option value="English" <%= student.subject === 'English' ? 'selected' : '' %>>English</option>
+                                            <option value="Science" <%= student.subject === 'Science' ? 'selected' : '' %>>Science</option>
+                                            <option value="Social Studies" <%= student.subject === 'Social Studies' ? 'selected' : '' %>>Social Studies</option>
+                                            <option value="Computer Science" <%= student.subject === 'Computer Science' ? 'selected' : '' %>>Computer Science</option>
+                                        </select>
+                                        <div class="select-icon">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Information Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <i class="fas fa-credit-card"></i>
+                                <h3>Payment Information</h3>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="feesPaid" name="feesPaid" <%= student.feesPaid ? 'checked' : '' %>>
+                                    <label for="feesPaid" class="checkbox-label">
+                                        <span class="checkmark"></span>
+                                        <span class="checkbox-text">
+                                            <strong>Fees Paid</strong>
+                                            <small>Mark as checked if the student has paid their fees</small>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large">
+                            <i class="fas fa-save"></i>
+                            <span>Update Student</span>
+                        </button>
+                        <a href="/" class="btn btn-secondary btn-large">
+                            <i class="fas fa-times"></i>
+                            <span>Cancel</span>
+                        </a>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 <%- include('partials/footer') %>
