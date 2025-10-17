@@ -1,7 +1,8 @@
 <%- include('partials/head', { title: 'Dashboard - EduManager' }) %>
 <body>
-    <div class="main-container">
-        <div class="header-section">
+    <%- include('partials/navbar') %>
+    <div class="main-container reveal fade-up">
+        <div class="header-section reveal fade-in">
             <h1><i class="fas fa-graduation-cap"></i> EduManager</h1>
             <p>Professional Student Management System</p>
         </div>
@@ -19,7 +20,7 @@
         <% } %>
 
         <div class="dashboard-layout">
-            <div class="sidebar">
+            <div class="sidebar reveal fade-up">
                 <div class="sidebar-header">
                     <h3 class="sidebar-title">
                         <i class="fas fa-chart-pie"></i> Overview
@@ -27,7 +28,7 @@
                     <p class="sidebar-subtitle">Quick statistics and actions</p>
                 </div>
 
-                <div class="stats-container">
+                <div class="stats-container stagger">
                     <div class="stat-card">
                         <div class="stat-content">
                             <div class="stat-number"><%= students.length %></div>
@@ -68,26 +69,22 @@
                     </h4>
                     <div class="action-buttons">
                         <a href="/add" class="add-student-btn">
-                            <i class="fas fa-plus"></i> Add New Student
+                            <i class="fas fa-plus"></i> Add Student
                         </a>
                         <button class="quick-btn" onclick="exportData()">
-                            <i class="fas fa-download"></i> Export Data
+                            <i class="fas fa-download"></i> Export CSV
                         </button>
                     </div>
                 </div>
-            </div>            <div class="main-content">
+            </div>            <div class="main-content reveal fade-up">
                 <div class="content-header">
                     <h2 class="content-title">
                         <i class="fas fa-users"></i> Student Directory
                     </h2>
-                    <div class="search-container">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" class="search-input" placeholder="Search students by name, email, or subject..." id="searchInput">
-                    </div>
                 </div>
 
                 <!-- Summary Cards -->
-                <div class="summary-cards">
+                <div class="summary-cards stagger">
                     <div class="summary-card">
                         <div class="summary-icon">
                             <i class="fas fa-graduation-cap"></i>
@@ -138,7 +135,7 @@
                     </div>
                 </div>
 
-                <div class="students-table-container">
+                <div class="students-table-container reveal fade-up">
                     <% if (students.length > 0) { %>
                         <div class="table-wrapper">
                             <table id="studentsTable" class="students-table">

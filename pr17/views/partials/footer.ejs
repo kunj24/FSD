@@ -1,27 +1,30 @@
     <script>
         // Global utility functions
         function showMessage(message, type = 'success') {
-            // Remove existing messages
-            const existingMessages = document.querySelectorAll('.alert');
-            existingMessages.forEach(msg => msg.remove());
+            // Ensure toast container exists
+            let toast = document.querySelector('.toast-container');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.className = 'toast-container';
+                document.body.appendChild(toast);
+            }
 
             const alertDiv = document.createElement('div');
             alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.animation = 'fadeDown 250ms ease-out, fadeIn 250ms ease-out';
             alertDiv.innerHTML = `
                 <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
                 <span>${message}</span>
             `;
 
-            // Insert at the top of the form container or page
-            const container = document.querySelector('.form-container') || document.querySelector('.page-container') || document.body;
-            container.insertBefore(alertDiv, container.firstChild);
+            toast.appendChild(alertDiv);
 
-            // Auto-remove after 5 seconds
+            // Auto-remove after 4 seconds
             setTimeout(() => {
                 alertDiv.style.opacity = '0';
-                alertDiv.style.transform = 'translateY(-20px)';
-                setTimeout(() => alertDiv.remove(), 300);
-            }, 5000);
+                alertDiv.style.transform = 'translateY(-10px)';
+                setTimeout(() => alertDiv.remove(), 250);
+            }, 4000);
 
             return alertDiv;
         }
@@ -376,6 +379,22 @@
                 }
             `;
             document.head.appendChild(style);
+
+            // IntersectionObserver to trigger reveal/stagger animations
+            if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+                const revealElements = document.querySelectorAll('.reveal, .stagger');
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('show');
+                            // One-shot
+                            io.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                revealElements.forEach(el => io.observe(el));
+            }
         });
 
         // Utility function for animations

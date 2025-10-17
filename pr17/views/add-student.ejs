@@ -1,8 +1,9 @@
 <%- include('partials/head', { title: 'Add Student - EduManager' }) %>
 <body>
-    <div class="page-container">
+    <%- include('partials/navbar') %>
+    <div class="page-container reveal fade-up">
         <div class="form-page">
-            <div class="form-container">
+            <div class="form-container reveal fade-in">
                 <div class="form-header">
                     <div class="header-icon">
                         <i class="fas fa-user-plus"></i>
@@ -19,7 +20,7 @@
                 <% } %>
 
                 <form method="POST" action="/students" id="addStudentForm" novalidate>
-                    <div class="form-sections">
+                    <div class="form-sections stagger">
                         <!-- Personal Information Section -->
                         <div class="form-section">
                             <div class="section-header">
