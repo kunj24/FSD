@@ -1,254 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Student - Student Management System</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .form-container {
-            max-width: 600px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 50px 40px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .form-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
-        }
-        
-        .form-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .form-header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-        
-        .form-header p {
-            color: #666;
-            font-size: 1.1rem;
-        }
-        
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-        
-        .form-group {
-            position: relative;
-        }
-        
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 16px 20px;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: white;
-            font-family: inherit;
-        }
-        
-        input:focus, select:focus {
-            outline: none;
-            border-color: #ffc107;
-            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
-            transform: translateY(-2px);
-        }
-        
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s ease;
-        }
-        
-        .checkbox-container:hover {
-            background: #e9ecef;
-        }
-        
-        .checkbox-container input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            margin: 0;
-            accent-color: #ffc107;
-        }
-        
-        .checkbox-container label {
-            margin: 0;
-            font-weight: 500;
-            text-transform: none;
-            letter-spacing: normal;
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-        
-        .btn {
-            padding: 16px 32px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            min-width: 140px;
-            justify-content: center;
-        }
-        
-        .btn-warning {
-            background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
-            color: white;
-            box-shadow: 0 10px 30px rgba(255, 193, 7, 0.3);
-        }
-        
-        .btn-warning:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(255, 193, 7, 0.4);
-        }
-        
-        .btn-secondary {
-            background: #f8f9fa;
-            color: #495057;
-            border: 2px solid #dee2e6;
-        }
-        
-        .btn-secondary:hover {
-            background: #e9ecef;
-            transform: translateY(-2px);
-        }
-        
-        .error-message {
-            background: rgba(220, 53, 69, 0.1);
-            color: #dc3545;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            border: 2px solid rgba(220, 53, 69, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        @media (max-width: 768px) {
-            .form-container {
-                padding: 30px 20px;
-                margin: 10px;
-            }
-            
-            .form-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .form-header h1 {
-                font-size: 2rem;
-            }
-            
-            .button-group {
-                flex-direction: column;
-            }
-        }
-    </style>
-</head>
+<%- include('partials/head', { title: 'Edit Student - EduManager' }) %>
 <body>
     <div class="form-container">
         <div class="form-header">
             <h1><i class="fas fa-user-edit"></i> Edit Student</h1>
             <p>Update student information</p>
         </div>
-        
+
         <% if (error) { %>
             <div class="error-message">
                 <i class="fas fa-exclamation-triangle"></i>
                 <%= error %>
             </div>
         <% } %>
-        
+
         <form method="POST" action="/students/<%= student._id %>?_method=PUT">
             <div class="form-grid">
                 <div class="form-group">
                     <label for="name"><i class="fas fa-user"></i> Full Name</label>
-                    <input type="text" id="name" name="name" value="<%= student.name %>" 
+                    <input type="text" id="name" name="name" value="<%= student.name %>"
                            placeholder="Enter student's full name" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
-                    <input type="email" id="email" name="email" value="<%= student.email %>" 
+                    <input type="email" id="email" name="email" value="<%= student.email %>"
                            placeholder="student@example.com" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="phone"><i class="fas fa-phone"></i> Phone Number</label>
-                    <input type="tel" id="phone" name="phone" value="<%= student.phone %>" 
+                    <input type="tel" id="phone" name="phone" value="<%= student.phone %>"
                            placeholder="1234567890" pattern="[0-9]{10}" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="grade"><i class="fas fa-layer-group"></i> Grade/Class</label>
                     <select id="grade" name="grade" required>
@@ -267,7 +51,7 @@
                         <option value="12th" <%= student.grade === '12th' ? 'selected' : '' %>>12th Grade</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group full-width">
                     <label for="subject"><i class="fas fa-book"></i> Subject</label>
                     <select id="subject" name="subject" required>
@@ -282,18 +66,18 @@
                         <option value="Computer Science" <%= student.subject === 'Computer Science' ? 'selected' : '' %>>Computer Science</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group full-width">
                     <div class="checkbox-container">
-                        <input type="checkbox" id="feesPaid" name="feesPaid" 
+                        <input type="checkbox" id="feesPaid" name="feesPaid"
                                <%= student.feesPaid ? 'checked' : '' %>>
                         <label for="feesPaid"><i class="fas fa-credit-card"></i> Fees Paid</label>
                     </div>
                 </div>
             </div>
-            
+
             <div class="button-group">
-                <button type="submit" class="btn btn-warning">
+                <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> Update Student
                 </button>
                 <a href="/" class="btn btn-secondary">
@@ -302,176 +86,4 @@
             </div>
         </form>
     </div>
-</body>
-</html>
-            font-weight: 600;
-            color: #333;
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        input:focus, select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .checkbox-group input[type="checkbox"] {
-            width: auto;
-        }
-        
-        .btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            margin-right: 10px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-        
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .form-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 25px;
-            }
-            
-            .form-actions {
-                flex-direction: column;
-            }
-            
-            .btn {
-                text-align: center;
-                margin-right: 0;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>✏️ Edit Student</h1>
-            <p>Update student details</p>
-        </div>
-        
-        <% if (error) { %>
-            <div class="error"><%= error %></div>
-        <% } %>
-        
-        <form method="POST" action="/students/<%= student._id %>?_method=PUT">
-            <div class="form-group">
-                <label for="name">Full Name *</label>
-                <input type="text" id="name" name="name" value="<%= student.name %>" 
-                       placeholder="Enter student's full name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email Address *</label>
-                <input type="email" id="email" name="email" value="<%= student.email %>" 
-                       placeholder="Enter email address" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="phone">Phone Number *</label>
-                <input type="tel" id="phone" name="phone" value="<%= student.phone %>" 
-                       placeholder="Enter 10-digit phone number" pattern="[0-9]{10}" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="grade">Grade/Class *</label>
-                <select id="grade" name="grade" required>
-                    <option value="">Select Grade</option>
-                    <option value="1st" <%= student.grade === '1st' ? 'selected' : '' %>>1st Grade</option>
-                    <option value="2nd" <%= student.grade === '2nd' ? 'selected' : '' %>>2nd Grade</option>
-                    <option value="3rd" <%= student.grade === '3rd' ? 'selected' : '' %>>3rd Grade</option>
-                    <option value="4th" <%= student.grade === '4th' ? 'selected' : '' %>>4th Grade</option>
-                    <option value="5th" <%= student.grade === '5th' ? 'selected' : '' %>>5th Grade</option>
-                    <option value="6th" <%= student.grade === '6th' ? 'selected' : '' %>>6th Grade</option>
-                    <option value="7th" <%= student.grade === '7th' ? 'selected' : '' %>>7th Grade</option>
-                    <option value="8th" <%= student.grade === '8th' ? 'selected' : '' %>>8th Grade</option>
-                    <option value="9th" <%= student.grade === '9th' ? 'selected' : '' %>>9th Grade</option>
-                    <option value="10th" <%= student.grade === '10th' ? 'selected' : '' %>>10th Grade</option>
-                    <option value="11th" <%= student.grade === '11th' ? 'selected' : '' %>>11th Grade</option>
-                    <option value="12th" <%= student.grade === '12th' ? 'selected' : '' %>>12th Grade</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="subject">Subject *</label>
-                <select id="subject" name="subject" required>
-                    <option value="">Select Subject</option>
-                    <option value="Mathematics" <%= student.subject === 'Mathematics' ? 'selected' : '' %>>Mathematics</option>
-                    <option value="Physics" <%= student.subject === 'Physics' ? 'selected' : '' %>>Physics</option>
-                    <option value="Chemistry" <%= student.subject === 'Chemistry' ? 'selected' : '' %>>Chemistry</option>
-                    <option value="Biology" <%= student.subject === 'Biology' ? 'selected' : '' %>>Biology</option>
-                    <option value="English" <%= student.subject === 'English' ? 'selected' : '' %>>English</option>
-                    <option value="Science" <%= student.subject === 'Science' ? 'selected' : '' %>>Science</option>
-                    <option value="Social Studies" <%= student.subject === 'Social Studies' ? 'selected' : '' %>>Social Studies</option>
-                    <option value="Computer Science" <%= student.subject === 'Computer Science' ? 'selected' : '' %>>Computer Science</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <div class="checkbox-group">
-                    <input type="checkbox" id="feesPaid" name="feesPaid" 
-                           <%= student.feesPaid ? 'checked' : '' %>>
-                    <label for="feesPaid">Fees Paid</label>
-                </div>
-            </div>
-            
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">💾 Update Student</button>
-                <a href="/" class="btn btn-secondary">❌ Cancel</a>
-            </div>
-        </form>
-    </div>
-</body>
-</html>
+<%- include('partials/footer') %>
