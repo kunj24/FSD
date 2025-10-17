@@ -1,0 +1,326 @@
+    <script>
+        // Global utility functions
+        function showMessage(message, type = 'success') {
+            // Remove existing messages
+            const existingMessages = document.querySelectorAll('.alert');
+            existingMessages.forEach(msg => msg.remove());
+
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+
+            // Insert at the top of the form container or page
+            const container = document.querySelector('.form-container') || document.querySelector('.page-container') || document.body;
+            container.insertBefore(alertDiv, container.firstChild);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                alertDiv.style.opacity = '0';
+                alertDiv.style.transform = 'translateY(-20px)';
+                setTimeout(() => alertDiv.remove(), 300);
+            }, 5000);
+
+            return alertDiv;
+        }
+
+        // Loading state management
+        function setLoading(button, loading = true) {
+            if (loading) {
+                button.disabled = true;
+                button.dataset.originalText = button.innerHTML;
+                button.innerHTML = `
+                    <div class="loading"></div>
+                    <span>Loading...</span>
+                `;
+                button.style.opacity = '0.7';
+            } else {
+                button.disabled = false;
+                button.innerHTML = button.dataset.originalText;
+                button.style.opacity = '1';
+            }
+        }
+
+        // Enhanced search functionality
+        function initializeSearch(searchInputId, tableBodySelector) {
+            const searchInput = document.getElementById(searchInputId);
+            if (!searchInput) return;
+
+            let searchTimeout;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                const searchTerm = this.value.toLowerCase().trim();
+                const rows = document.querySelectorAll(tableBodySelector);
+
+                // Show loading state for search
+                const tableContainer = document.querySelector('.students-table-container');
+                if (tableContainer) {
+                    tableContainer.style.opacity = '0.7';
+                }
+
+                searchTimeout = setTimeout(() => {
+                    let visibleCount = 0;
+                    rows.forEach(row => {
+                        const searchableContent = Array.from(row.querySelectorAll('.searchable'))
+                            .map(cell => cell.textContent.toLowerCase())
+                            .join(' ');
+
+                        if (searchableContent.includes(searchTerm)) {
+                            row.style.display = '';
+                            visibleCount++;
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+
+                    // Update opacity back
+                    if (tableContainer) {
+                        tableContainer.style.opacity = '1';
+                    }
+
+                    // Show result count
+                    updateSearchResults(searchTerm, visibleCount, rows.length);
+                }, 300);
+            });
+        }
+
+        function updateSearchResults(searchTerm, visibleCount, totalCount) {
+            let resultsDiv = document.querySelector('.search-results');
+            if (!resultsDiv) {
+                resultsDiv = document.createElement('div');
+                resultsDiv.className = 'search-results';
+                const searchContainer = document.querySelector('.search-container');
+                if (searchContainer) {
+                    searchContainer.appendChild(resultsDiv);
+                }
+            }
+
+            if (searchTerm) {
+                resultsDiv.textContent = `Found ${visibleCount} of ${totalCount} students`;
+                resultsDiv.style.display = 'block';
+            } else {
+                resultsDiv.style.display = 'none';
+            }
+        }
+
+        // Enhanced form validation
+        function validateForm(form) {
+            const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+            let isValid = true;
+            let firstInvalidInput = null;
+
+            inputs.forEach(input => {
+                const isEmpty = !input.value.trim();
+                const wrapper = input.closest('.input-wrapper, .select-wrapper') || input;
+
+                if (isEmpty) {
+                    wrapper.classList.add('error');
+                    if (!firstInvalidInput) firstInvalidInput = input;
+                    isValid = false;
+                } else {
+                    wrapper.classList.remove('error');
+                }
+
+                // Email validation
+                if (input.type === 'email' && input.value.trim()) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(input.value.trim())) {
+                        wrapper.classList.add('error');
+                        if (!firstInvalidInput) firstInvalidInput = input;
+                        isValid = false;
+                    }
+                }
+
+                // Phone validation
+                if (input.type === 'tel' && input.value.trim()) {
+                    const phoneRegex = /^[0-9]{10}$/;
+                    if (!phoneRegex.test(input.value.trim())) {
+                        wrapper.classList.add('error');
+                        if (!firstInvalidInput) firstInvalidInput = input;
+                        isValid = false;
+                    }
+                }
+            });
+
+            // Focus first invalid input
+            if (firstInvalidInput) {
+                firstInvalidInput.focus();
+                firstInvalidInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            return isValid;
+        }
+
+        // Form submission handler
+        function handleFormSubmission(form, submitButton) {
+            form.addEventListener('submit', function(e) {
+                if (!validateForm(form)) {
+                    e.preventDefault();
+                    showMessage('Please fill in all required fields correctly.', 'error');
+                    return false;
+                }
+
+                // Set loading state
+                setLoading(submitButton, true);
+
+                // Add a timeout for slow responses
+                setTimeout(() => {
+                    if (submitButton.disabled) {
+                        setLoading(submitButton, false);
+                        showMessage('Request is taking longer than expected. Please try again.', 'error');
+                    }
+                }, 10000);
+            });
+        }
+
+        // Delete confirmation with loading
+        function confirmDelete(studentName, deleteUrl) {
+            if (confirm(`Are you sure you want to delete ${studentName}? This action cannot be undone.`)) {
+                // Create a temporary form for DELETE request
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = deleteUrl;
+
+                const methodInput = document.createElement('input');
+                methodInput.type = 'hidden';
+                methodInput.name = '_method';
+                methodInput.value = 'DELETE';
+                form.appendChild(methodInput);
+
+                document.body.appendChild(form);
+
+                // Show loading state
+                const loadingOverlay = document.createElement('div');
+                loadingOverlay.className = 'loading-overlay';
+                loadingOverlay.innerHTML = `
+                    <div class="loading-spinner">
+                        <div class="loading"></div>
+                        <p>Deleting student...</p>
+                    </div>
+                `;
+                document.body.appendChild(loadingOverlay);
+
+                form.submit();
+                return true;
+            }
+            return false;
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-hide alerts after 5 seconds
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    alert.style.transform = 'translateY(-20px)';
+                    setTimeout(() => alert.remove(), 300);
+                }, 5000);
+            });
+
+            // Initialize form validation and submission
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                const submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
+                if (submitButton) {
+                    handleFormSubmission(form, submitButton);
+                }
+            });
+
+            // Enhanced input interactions
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                // Real-time validation feedback
+                input.addEventListener('blur', function() {
+                    const wrapper = this.closest('.input-wrapper, .select-wrapper') || this;
+                    if (this.hasAttribute('required') && !this.value.trim()) {
+                        wrapper.classList.add('error');
+                    } else {
+                        wrapper.classList.remove('error');
+                    }
+                });
+
+                // Clear errors on input
+                input.addEventListener('input', function() {
+                    const wrapper = this.closest('.input-wrapper, .select-wrapper') || this;
+                    wrapper.classList.remove('error');
+                });
+            });
+
+            // Smooth scrolling for anchor links
+            const anchorLinks = document.querySelectorAll('a[href^="#"]');
+            anchorLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Add loading overlay styles dynamically
+            const style = document.createElement('style');
+            style.textContent = `
+                .loading-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 9999;
+                    backdrop-filter: blur(5px);
+                }
+                .loading-spinner {
+                    background: white;
+                    padding: 32px;
+                    border-radius: 16px;
+                    text-align: center;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                }
+                .loading-spinner p {
+                    margin-top: 16px;
+                    color: var(--gray-700);
+                    font-weight: 500;
+                }
+                .search-results {
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    right: 0;
+                    background: white;
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    font-size: 0.875rem;
+                    color: var(--gray-600);
+                    margin-top: 4px;
+                    display: none;
+                    z-index: 10;
+                }
+                .alert {
+                    transition: all 0.3s ease;
+                }
+                .alert[style*="opacity: 0"] {
+                    transform: translateY(-20px) !important;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+        // Utility function for animations
+        function animateElement(element, animation) {
+            element.style.animation = animation;
+            element.addEventListener('animationend', function() {
+                element.style.animation = '';
+            }, { once: true });
+        }
+    </script>
+</body>
+</html>
